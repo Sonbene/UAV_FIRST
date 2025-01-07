@@ -1,0 +1,2 @@
+../Core/Src/motorControl.c:5:6:motor_init	16	static
+../Core/Src/motorControl.c:10:6:UAV_Motor_Speed	16	static
