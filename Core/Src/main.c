@@ -18,12 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "math.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
 #include "MPU6050.h"
-#include "motorControl.h"
-#include "PID.h"
+
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,7 +44,6 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
 I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim1;
@@ -62,6 +63,8 @@ static void MX_TIM1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+
 MPU6050_t MPU6050;
 
 void UAV_Init(void)
@@ -73,16 +76,8 @@ void UAV_Init(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 
 	//Set parameter of timer1
-	htim1.Instance->ARR = 20000;
+	htim1.Instance->ARR = 19999;
 	htim1.Instance->PSC = 99;
-
-	motor_init(&htim1);
-
-	//Init MPU 6050
-	while(MPU6050_Init())
-	{
-
-	}
 
 	//Set initial speed of motor;
 	htim1.Instance->CCR1 = 1000;
@@ -90,7 +85,24 @@ void UAV_Init(void)
 	htim1.Instance->CCR3 = 1000;
 	htim1.Instance->CCR4 = 1000;
 
+	//UAV_Motor_Init(&htim1);
+
+	//Init MPU 6050
+	while(MPU6050_Init())
+	{
+
+	}
+
+	MPU6050_Read_All(&MPU6050);
+
+	HAL_Delay(5000);
+
+	//PID_Init(&MPU6050);
+
+
+
 }
+
 /* USER CODE END 0 */
 
 /**
@@ -134,8 +146,6 @@ int main(void)
   while (1)
   {
 	  MPU6050_Read_All(&MPU6050);
-	  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-	  HAL_Delay(1000);
 
 
     /* USER CODE END WHILE */

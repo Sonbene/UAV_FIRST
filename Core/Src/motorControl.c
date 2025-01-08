@@ -2,7 +2,7 @@
 
 TIM_HandleTypeDef *tim1;
 
-void motor_init(TIM_HandleTypeDef *timer)
+void UAV_Motor_Init(TIM_HandleTypeDef *timer)
 {
 	tim1 = timer;
 }
@@ -57,6 +57,13 @@ void UAV_Motor_Speed(uint8_t motor, uint16_t speed)
 		}
 		__HAL_TIM_SET_COMPARE(tim1, TIM_CHANNEL_4, speed);
 	}
+}
+
+void UAV_Motor_calculate(MPU6050_t *mpu, motor_speed_t *speed, double PID_x, double PID_y, double PID_z)
+{
+	PID_Calculated(mpu, &PID_x, &PID_y, &PID_z);
+
+	//speed.motor1_speed =
 }
 
 
